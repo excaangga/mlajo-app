@@ -1,37 +1,64 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Octicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import Navbar from "@/components/home/Navbar";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
+    interface tabBarOptionsParams {
+        title: string;
+        iconName: React.ComponentProps<typeof Octicons>['name'];
+    };
+
+    const tabBarOptions = ({title, iconName}: tabBarOptionsParams): BottomTabNavigationOptions => ({
+        title,
+        tabBarIcon: ({ color }) => <Octicons size={26} name={iconName} color={color} />,
+        tabBarIconStyle: {
+            marginTop: 4,
+        },
+        tabBarLabelStyle: {
+            fontSize: 12,
+            fontFamily: 'medium'
+        },
+    });
+
+    return (
+        <Tabs screenOptions={{ tabBarActiveTintColor: '#2F934B' }}>
+            <Tabs.Screen
+                name="index"
+                options={{
+                    ...tabBarOptions({ title: 'Beranda', iconName: 'home' }),
+                    header: () => <Navbar />,
+                }}
+            />
+            <Tabs.Screen
+                name="komunitas"
+                options={{
+                    ...tabBarOptions({ title: 'Komunitas', iconName: 'people' }),
+                    headerShown: false,  // Hide the default header
+                }}
+            />
+            <Tabs.Screen
+                name="live"
+                options={{
+                    ...tabBarOptions({ title: 'Live', iconName: 'device-camera-video' }),
+                    headerShown: false,  // Hide the default header
+                }}
+            />
+            <Tabs.Screen
+                name="notifikasi"
+                options={{
+                    ...tabBarOptions({ title: 'Notifikasi', iconName: 'bell' }),
+                    headerShown: false,  // Hide the default header
+                }}
+            />
+            <Tabs.Screen
+                name="saya"
+                options={{
+                    ...tabBarOptions({ title: 'Saya', iconName: 'person' }),
+                    headerShown: false,  // Hide the default header
+                }}
+            />
+        </Tabs>
+    );
 }
